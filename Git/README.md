@@ -23,4 +23,7 @@ git config user.name "Luis Lerma"
 
 #Help
 git help config 	
+
+#Show all config
+git config --list
 ```
