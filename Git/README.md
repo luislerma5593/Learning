@@ -3,10 +3,10 @@
 All the changes, must be done in the Dev branch, and then merge with the Main branch
 
 ```git
-git init - Create repository
-git clone - Clone repository
-git add - To stagin area
-git commit - Apply the changes
+git init → Create repository
+git clone → Clone repository
+git add → To stagin area
+git commit → Apply the changes
 ```
 
 ### Git config
@@ -15,9 +15,12 @@ git commit - Apply the changes
 git config --global user.name "Luis Lerma"
 git config --global user.email "luislerma..."
 
-git config --global user.name	#To consult
+#To consult
+git config --global user.name	
 
-git config user.name "Luis Lerma"	#Just to local project
+#Just to local project
+git config user.name "Luis Lerma"	
 
-git help config 	#Help
+#Help
+git help config 	
 ```
