@@ -10,6 +10,10 @@ git add → To stagin area
 git commit → Apply the changes
 git status → See the status
 git log → See all the commits
+git clone https://github.com/beduExpert/Curso-Introductorio-Git-2020.git → Clone from url
+git branch → To see the used branch
+git branch name → Crate a branches called "name"
+git checkout name → Change to "name" branch
 ```
 
 ### Git config
@@ -73,9 +77,7 @@ $ git commit
  # Or git commit -m "Name"
 
 LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
-$ hit push
-bash: hit: command not found
-
-LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
 $ git push
 ```
+
+This change was made in the Test branch
