@@ -41,13 +41,39 @@ mkdir → Este comando sirve para crear nuevos directorios; por ejemplo:mkdir nu
 
 rm → Si queremos borrar algún archivo o directorio podemos hacer uso del comando rm y el nombre del archivo que deseamos borrar; por ejemplo: rm archivo.txt Para borrar directorios es necesario usar el atributo -rf; por ejemplo: rm -rf /directorio/
 
-### Ad and commit
+### Add, commit and push
 
 https://www.youtube.com/watch?v=UJGKWMHX038&t=348s
 
 ```git
 vim index.html → Create file, :x to exit
 
-git add index.html → Add everything, then use :wq for the name of commit
-git commit -m "Commit name" → Commit
+git add index.html → Add a file
+git commit - Then write the name of the commit, ESC → :wq 
+git push
+```
+
+### Example
+
+```git
+LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
+$ vim test.txt
+
+LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
+$ git add test.txt
+warning: LF will be replaced by CRLF in Git/test.txt.
+The file will have its original line endings in your working directory
+
+LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
+$ git commit
+[main b7e4e19] Test
+ 1 file changed, 1 insertion(+)
+ create mode 100644 Git/test.txt
+
+LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
+$ hit push
+bash: hit: command not found
+
+LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
+$ git push
 ```
