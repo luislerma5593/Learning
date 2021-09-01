@@ -69,6 +69,8 @@ $ git commit
 [main b7e4e19] Test
  1 file changed, 1 insertion(+)
  create mode 100644 Git/test.txt
+ 
+ # Or git commit -m "Name"
 
 LLerma@MOLLLermaO MINGW64 ~/Documents/GitHub/Learning/Git (main)
 $ hit push
