@@ -2,10 +2,12 @@
 
 All the changes, must be done in the Dev branch, and then merge with the Main branch
 
+```git
 git init - Create repository
 git clone - Clone repository
 git add - To stagin area
 git commit - Apply the changes
+```
 
 ### Git config
 
