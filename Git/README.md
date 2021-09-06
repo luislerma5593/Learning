@@ -14,6 +14,7 @@ git clone https://github.com/beduExpert/Curso-Introductorio-Git-2020.git → Clo
 git branch → To see the used branch
 git branch name → Crate a branches called "name"
 git checkout name → Change to "name" branch
+git merge name_of_branch → Do the merge
 ```
 
 ### Git config
