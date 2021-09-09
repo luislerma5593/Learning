@@ -2,7 +2,7 @@
 
 ## OOP
 
-__init__
+`__init__`
 
 
 The __init__ method is the most important method in a class.
