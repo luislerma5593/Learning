@@ -2,6 +2,9 @@
 
 ## OOP
 
+- A variable stored in an instance or class is called an **attribute**.
+- A function stored in an instance or class is called a **method**.
+
 ### Class
 ```py
 class Animal: 
@@ -54,12 +57,46 @@ __iter__ for iteration over objects (e.g., in for loops)
 __contains__ for in
 ```
 
+### Class Methods
+
+Class methods are different - they are called by a class, which is passed to the cls parameter of the method.
 ```py
+class Rectangle:
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+
+    def calculate_area(self):
+        return self.width * self.height
+
+    @classmethod
+    def new_square(cls, side_length):
+        return cls(side_length, side_length)
+
+square = Rectangle.new_square(5)
+print(square.calculate_area())
+
+# new_square is a class method and is called on the class, rather than on an instance of the class. It returns a new object of the class cls.
 ```
 
+### Static Methods
+
+Static methods are similar to class methods, except they don't receive any additional arguments; they are identical to normal functions that belong to a class.
 ```py
+class Calculator:
+    #your code goes here
+
+    @staticmethod   
+    def add(n1, n2):
+        return n1 + n2
+        
+n1 = 5
+n2 = 6
+
+print(Calculator.add(n1, n2))
 ```
 
+### Properties
 ```py
 ```
 
