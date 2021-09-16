@@ -97,7 +97,20 @@ print(Calculator.add(n1, n2))
 ```
 
 ### Properties
+
+They are created by putting the property decorator above a method, which means when the instance attribute with the same name as the method is accessed, the method will be called instead.
 ```py
+class Pizza:
+    def __init__(self, toppings):
+        self.toppings = toppings
+
+    @property
+    def pineapple_allowed(self):
+        return False
+
+pizza = Pizza(["cheese", "tomato"])
+print(pizza.pineapple_allowed)
+pizza.pineapple_allowed = True
 ```
 
 ```py
