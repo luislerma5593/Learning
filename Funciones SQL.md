@@ -15,6 +15,14 @@ UNION - Combines multiple datasets into a single dataset, and removes any existi
 UNION ALL - Combines multiple datasets into one dataset, but does not remove duplicate rows.
 ```
 
+### Other functions
+```sql
+coalesce(NULL, 1, 3) - coalesce() checks arguments in order and returns the first non-NULL value, if one exists.
+SELECT COALESCE(a, b, 'Unknown') - Unknown as "fallback" value	
+SELECT left/right(string,x) - Gets x characters from the left/right
+HAVIN x > y - Having is used instead of WHERE, when using aggregate functions
+```
+
 ### Insert data
 ```sql
 INSERT INTO table_name
