@@ -39,6 +39,32 @@ df = pd.DataFrame.from_dict(normalized) #No es necesaria, se usa cuando hay much
 df.head()
 ```
 
+## Web Scraping
+```py
+from urllib import request
+import ssl
+
+url="https://en.wikipedia.org/wiki/List_of_S%26P_500_companies"
+context = ssl._create_unverified_context()
+response = request.urlopen(url, context=context)
+html = response.read()
+
+import pandas as pd
+data = pd.read_html(html)
+
+
+# With request header
+
+import pandas as pd
+import requests
+
+url_link = 'https://finance.yahoo.com/quote/TSLA/profile'
+r = requests.get(url_link,headers ={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'})
+
+data = pd.read_html(r.text)
+print(data[0]) 
+```
+
 ## GENERAL
 
 ```py
