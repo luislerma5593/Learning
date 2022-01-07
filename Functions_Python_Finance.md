@@ -13,6 +13,8 @@ npf.irr(x) - Internal rate of return
 
 ## Financial functions
 ```py
+---------------- Accesing Data ----------------
+
 data = yf.Ticker("TSLA") - Get financial informatio from TSLA
 data.info - Get info from company
 data.info.keys() - Get keys
@@ -28,8 +30,19 @@ data.recommendations - Get recommedations by investment banks (Index is "Date" c
 
 # 1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max.
 data.history(period='x', start "x", end="x") - Get stock data for a period of time (Empty returns 1 month)
-
 yf.download("ticker1 ticker2 ...", start='x') - Get data from multiple tickers
+
+# ---------------- Analyzing Data ----------------
+
+s1 = series.pct_change() - Calculates the percentage change
+(x + 1).cumprod() - Calculates the accumulated product
+series.pct_change().corr() - To see the correlation between different stocks
+
+# Sharpe
+ret = (x * weights).sum(axis = 1)
+annual_std = np.std(ret) * np.sqrt(252)
+sharpe = (np.mean(ret) / np.std(ret))  *  np.sqrt(252)
+
 ```
 
 ## Web Scraping
