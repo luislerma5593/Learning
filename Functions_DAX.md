@@ -9,6 +9,14 @@
 - Ready for production
 - Paginated reports
 
+## DAX
+```sql
+CALCULATE(Aggregation, filter_1, filter_2, ...) 
+SUMX (table, expresion) - Sum the result of an operation done to every row
+SUBSTITUTE(column,Old_text,New_text) - Substitute a string
+RELATED(Table[Column]) - Add a column from another table
+```
+
 ## Tables
 
 ### Fact tables
@@ -22,10 +30,5 @@
 - Short and wide
 - Few rows but lots of columns
 
-## Basic
-```sql
-CALCULATE(Aggregation, filter_1, filter_2, ...) 
-SUMX (table, expresion) - Sum the result of an operation done to every row
-SUBSTITUTE(column,Old_text,New_text) - Substitute a string
-RELATED(Table[Column]) - Add a column from another table
-```
+![image](https://user-images.githubusercontent.com/78183885/153962359-9adc0f3e-cb54-4d49-89fe-60cfd5bfd43b.png)
+
