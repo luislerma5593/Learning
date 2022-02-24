@@ -548,6 +548,7 @@ $ - Ends with
 
 ## NLTK
 
+```py
 grouped_by_title.apply(nltk.word_tokenize) - Separar cada oración en palabras
 all_words = tokenized.sum() - Obtiene todas las palabras que se usan
 text = nltk.Text(all_words) - Crea un objeto tipo text
@@ -570,10 +571,11 @@ grouped_by_title = grouped_by_title.str.replace('[^\w\s]', '')
 grouped_by_title = grouped_by_title.str.replace('\d', '')
 grouped_by_title = grouped_by_title.str.replace('\\n', '')
 grouped_by_title = grouped_by_title.dropna()
-
+```
 
 ## Freq dist
 
+```py
 freq_dist = nltk.FreqDist(all_words) - Obtener la distribución de frecuencias 
 freq_dist.most_common(50) - Obtener las palabras más repetidas
 freq_dist_no_stop_words.hapaxes()[:20] - Obtener palabras que aparecen una vez
@@ -586,16 +588,17 @@ freq_dist_no_stop_words = nltk.FreqDist(all_words_except_stop_words)
 freq_dist_no_stop_words.most_common(50)
 
 freq_dist_no_stop_words.plot(50, cumulative=True) - Graficar la proporción del texto que es ocupada por las 50 palabras más comunes
-
+```
 
 ## Análisis de sentimientos
 
 https://textblob.readthedocs.io/en/dev/
 
+```py
 from textblob import TextBlob
 TextBlob(grouped_by_title.iloc[100])
 TextBlob(grouped_by_title.iloc[100]).sentiment - Obtener análisis de sentimientos (polaridad y subjetividad)
-
+```
 
 # Machine Learning
 
@@ -603,14 +606,15 @@ https://jarroba.com/seleccion-del-numero-optimo-clusters/
 
 ## K means
 
+```py
 from sklearn.cluster import KMeans
 k_means = KMeans(n_clusters=6, max_iter=10000)
 k_means.fit(df[['latitud', 'longitud']])
-
+```
 
 ## Matriz de confusión
 
-
+```py
 y_pred = logreg.predict(X_test)
 from sklearn import metrics
 cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
@@ -634,9 +638,11 @@ print("Precision:",metrics.precision_score(y_test, y_pred))
 print("Exactitud:",metrics.accuracy_score(y_test, y_pred))
 print("Sensibilidad:",metrics.recall_score(y_test, y_pred))
 print("Especificidad:", tn / (tn + fp))
+```
 
 ## Curva ROC
 
+```py
 from sklearn.metrics import roc_curve, auc
 fpr, tpr, _ = roc_curve(y_test, y_pred_proba[:, 1])
 roc_auc = auc(fpr, tpr)
