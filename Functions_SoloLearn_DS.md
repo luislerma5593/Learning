@@ -65,6 +65,7 @@ plt.xlabel('x') - X Label
 plt.ylabel('y') - Y Label
 plt.title('Lab') - Title
 plt.legend() - Add legend
+plt.text(x_cord,y_cord,text) - Add a text
 plt.xlim() - X limit
 plt.ylim() - Y limit
 plt.show() - Show a plot
