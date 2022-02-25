@@ -15,7 +15,22 @@ CALCULATE(Aggregation, filter_1, filter_2, ...)
 SUMX (table, expresion) - Sum the result of an operation done to every row
 SUBSTITUTE(column,Old_text,New_text) - Substitute a string
 RELATED(Table[Column]) - Add a column from another table
+CALENDAR() - Return all dates in a range
+DATE(yyyy,mm,dd) - Creates a date
+SELECTCOLUMNS(Col1,Col2,...) - Select columns function
+DISTINCT() - Get unique rows
+MOD(Number, Divisor) - Returns the remainder after a number is divided by a divisor
+USERELATIONSHIP(Col1,Col2) - Specify an existing relation (Not active)
 ```
+### Examples
+```sql
+Related number of employees = CALCULATE(SUM('Summary Statistics Double NAICS'[Number of employees]), USERELATIONSHIP('NAICS Code'[2017 NAICS code],'Summary Statistics Double NAICS'[NAICS Code Related])) 
+```
+
+## Database schemas
+
+-  Star schema - One Fact table aurounded by dimensional tables
+-  Snowflake schema - Allow relationships between dimensions
 
 ## Tables
 
