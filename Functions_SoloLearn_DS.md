@@ -57,15 +57,26 @@ df["col"].describe() - Count, unique, top, freq
 plt.style.use('ggplot') - Change style as R
 
 plt.plot(x,y)
+
 plt.hist(x)
+- bins = number_of_bins
+- range = (min, max)
+- density = True/False (probability)
+
 plt.boxplot(x)
-plt.barplot(x)
+
+plt.barplot(x,y)
+- bottom = df.x
+- yerr = df.error
+
+plt.barh(x,y)
+plt.scatter(x, y, c='m')
 
 plt.title('Lab') - Title
 plt.xlabel('x') - X Label
 plt.ylabel('y') - Y Label
 
-plt.plot(..., legend = "Leg_1")
+plt.plot(..., label	 = "Leg_1")
 plt.legend() - Add legend
 
 plt.text(x_cord,y_cord,text) - Add a text
@@ -78,7 +89,7 @@ plt.savefig("Img.png")
 df.plot(kind = 'scatter',x = 'x',y = 'y') - Plot with Pandas
 df.plot(kind = "hist"....) - Histogram
 
-plt.scatter(x, y, c='m'); - Scatterplot
+
 plt.plot(x, y, c='b'); - Plot x and y
 plt.axvline(x.mean(), c='y') - Vertical line
 
