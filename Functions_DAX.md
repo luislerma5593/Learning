@@ -25,6 +25,8 @@ USERELATIONSHIP(Col1,Col2) - Specify an existing relation (Not active)
 ### Examples
 ```sql
 Related number of employees = CALCULATE(SUM('Summary Statistics Double NAICS'[Number of employees]), USERELATIONSHIP('NAICS Code'[2017 NAICS code],'Summary Statistics Double NAICS'[NAICS Code Related])) 
+Slicer summary stats = INT(NOT ISEMPTY('Summary Statistics')) - Cross filtering most efficient option
+
 ```
 
 ## Database schemas

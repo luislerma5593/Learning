@@ -61,10 +61,13 @@ plt.hist(x)
 plt.boxplot(x)
 plt.barplot(x)
 
+plt.title('Lab') - Title
 plt.xlabel('x') - X Label
 plt.ylabel('y') - Y Label
-plt.title('Lab') - Title
+
+plt.plot(..., legend = "Leg_1")
 plt.legend() - Add legend
+
 plt.text(x_cord,y_cord,text) - Add a text
 plt.xlim() - X limit
 plt.ylim() - Y limit
@@ -89,12 +92,47 @@ https://matplotlib.org/stable/api/markers_api.html
 ## Colors
 
 ```py
+plt.plot(...,color = "Orange")
+
 k for black 
 r for red
 b for blue
 g for green
 c for cyan
 ```
+
+## Linestyles
+```py
+plt.plot(..., linestyle = 2)
+
+-
+--
+-.
+:
+```
+
+## Markers
+```py
+plt.plot(..., marker = "x")
+
+w
+s
+o
+d
+*
+h
+```
+
+## Style
+```py
+plt.style.use("x")
+
+fivethirtyeight
+ggplot
+seabron
+default
+```
+
 
 ## Create a figure
 ```py
