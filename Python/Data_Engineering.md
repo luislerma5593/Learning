@@ -35,7 +35,7 @@ Consist of one or more fact tables referencing any number of dimension tables.
 Fact tables: Contain records that represent things that happened in the world, like orders.
 Dim tables: Contain information on the world itself, like customer names or product prices.
 
-## Paralel computation frameworks
+## Parallel computation frameworks
 
 1. Apache Hadoop
 The most important are:

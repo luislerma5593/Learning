@@ -114,6 +114,17 @@ TOTALYTD(
 )		
 ```
 
+SWITCH
+```
+Employee Performance Analysis = 
+SWITCH(
+    TRUE,
+    AND([Average Discount Rate] < .3296, [Profit Ratio] > .5380), "High",
+    AND([Average Discount Rate] < .3300, [Profit Ratio] > .5370), "Med",    
+    "Low"
+)
+```
+
 Typicaly used:
 ``` 
 SUMX(
