@@ -26,6 +26,9 @@ Main companies are Amazon, Microsoft and Google.
 2. Computation (Perform calculations on the cloud, like hosting a web server or using virtual machines)
 3. Databases
 
+![image](https://user-images.githubusercontent.com/78183885/166346654-1779461b-35f4-4d3c-a049-032fa731b97a.png)
+
+
 ## Schemas
 
 - Star schema
