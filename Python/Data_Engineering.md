@@ -70,12 +70,14 @@ Stream processing is ideal for projects that require speed and nimbleness. The m
 - Aggregate data
 - Join data
 
-## Tools
+## Toolbox
 
 1. Databases (MySQL or PostgreSQL)
 2. Processing (Apache Spark or Hive)
 3. Scheduling (Apache Airflow or Oozie)
 - 'JoinOrder' needs to be run after 'CleanProduct' and 'CleanOrder'
+
+* Note: Spark is the name of the engine to perform cluster computing, while PySpark is the Python library for using Spark.
 
 ## Cloud providers
 
