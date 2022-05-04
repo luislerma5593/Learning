@@ -4,6 +4,67 @@ Extracts data through connections to several databases, transforms it using a cl
 
 Sources can be external APIs or other file formats too.
 
+## Data Engineering for Everyone
+
+### Data worflow
+
+1. Data collection (Data Engineer)
+2. Data preparation
+3. Exploration & Visualization
+4. Experimentation & Prediction
+
+Data piplelines,ensure an efficient flow of the data
+
+Automate:
+* Extracting
+* Transforming
+* Combining
+* Validating
+* Loading
+
+Reduce:
+* Human intervention
+* Errors
+* Time it takes data to flow
+
+### Data Lakes & data warehouse
+
+#### Data Lake
+* Stores raw data
+* Contains a lot of information
+* Stores all data structures
+* Requires up to date data
+* Used by Data Scientists
+* Big data, real time analytics
+
+#### Data Warehouse
+* Specific data for specific use
+* Relatively small
+* Stores mainly structured data
+* More costly to update
+* Optimized for data analysis
+* Used by Analyst and Business Analysts
+* Read-only queries
+
+### Batch & Streaming Processing
+
+#### Batch processing
+With batch processing, data is collected in batches and then fed into an analytics system. A “batch” is a group of data points collected within a given time period.
+
+Unlike stream processing, batch processing does not immediately feed data into an analytics system, so results are not available in real-time. With batch processing, some type of storage is required to load the data, such as a database or a file system.
+
+#### Streaming processing
+
+With stream processing, data is fed into an analytics system piece-by-piece as soon as it is generated. Instead of processing a batch of data over time, stream processing feeds each data point or “micro-batch” directly into an analytics platform. This allows teams to produce key insights in near real-time.
+
+Stream processing is ideal for projects that require speed and nimbleness. The method is less relevant for projects with high data volumes or deep data analysis.
+
+### Schedule data processing tasks
+
+- Manual (Run a pipeline to test it)
+- Time (Collecting data from google analytics every day at 00:00)
+- Condition (Updating number of followers for a playlist after one user suscribes)
+
 ### Processing Data
 - Clean data
 - Aggregate data
@@ -169,7 +230,7 @@ db_engine_dwh = sqlalchemy.create_engine(connection_uri)
 film_pdf_joined = film_pdf.join(recommendations)
 
 # Finish the .to_sql() call to write to store.film
-film_pdf_joined.to_sql("film", db_engine_dwh, schema="store", if_exists="replace")
+film_pdf_joined.to_sql("film", db_engine_dwh, schema="store", if_exists="replace") #Can be ->  if_exists="append"
 
 # Run the query to fetch the data
 pd.read_sql("SELECT film_id, recommended_film_ids FROM store.film", db_engine_dwh)
@@ -264,13 +325,123 @@ assemble_body.set_downstream(apply_paint)
 ### DAGs
 
 In Airflow, a DAG – or a Directed Acyclic Graph – is a collection of all the tasks you want to run, organized in a way that reflects their relationships and dependencies.
---------
 
---------
-
---------
-
---------
-
---------
 ```
+
+---
+
+## Case
+
+### Extract
+```py
+# Complete the connection URI
+connection_uri = "postgresql://repl:password@localhost:5432/datacamp_application" 
+db_engine = sqlalchemy.create_engine(connection_uri)
+
+# Get user with id 4387
+user1 = pd.read_sql("SELECT * FROM rating WHERE user_id=4387", db_engine)
+
+# Get user with id 18163
+user2 = pd.read_sql("SELECT * FROM rating WHERE user_id=18163", db_engine)
+
+# Get user with id 8770
+user3 = pd.read_sql("SELECT * FROM rating WHERE user_id=8770", db_engine)
+
+# Use the helper function to compare the 3 users
+print_user_comparison(user1, user2, user3)
+```
+
+### Transform
+```py
+# Complete the transformation function
+def transform_avg_rating(rating_data):
+    # Group by course_id and extract average rating per course
+    avg_rating = rating_data.groupby('course_id').rating.mean()
+    # Return sorted average ratings per course
+    sort_rating = avg_rating.sort_values(ascending=False).reset_index()
+    return sort_rating
+
+# Extract the rating data into a DataFrame    
+rating_data = extract_rating_data(db_engines)
+
+# Use transform_avg_rating on the extracted data and print results
+avg_rating_data = transform_avg_rating(rating_data)
+print(avg_rating_data) 
+
+---
+
+course_data = extract_course_data(db_engines)
+
+# Print out the number of missing values per column
+print(course_data.isna().sum())
+
+# The transformation should fill in the missing values
+def transform_fill_programming_language(course_data):
+    imputed = course_data.fillna({"programming_language": "R"})
+    return imputed
+
+transformed = transform_fill_programming_language(course_data)
+
+# Print out the number of missing values per column of transformed
+print(transformed.isna().sum())
+
+---
+
+# Complete the transformation function
+def transform_recommendations(avg_course_ratings, courses_to_recommend):
+    # Merge both DataFrames
+    merged = courses_to_recommend.merge(avg_course_ratings) 
+    # Sort values by rating and group by user_id
+    grouped = merged.sort_values("rating", ascending=False).groupby("user_id")
+    # Produce the top 3 values and sort by user_id
+    recommendations = grouped.head(3).sort_values("user_id").reset_index()
+    final_recommendations = recommendations[["user_id", "course_id","rating"]]
+    # Return final recommendations
+    return final_recommendations
+
+# Use the function with the predefined DataFrame objects
+recommendations = transform_recommendations(avg_course_ratings, courses_to_recommend)
+```
+
+### Load
+
+```py
+connection_uri = "postgresql://repl:password@localhost:5432/dwh"
+db_engine = sqlalchemy.create_engine(connection_uri)
+
+def load_to_dwh(recommendations):
+    recommendations.to_sql("recommendations", db_engine, if_exists="replace")
+	
+# Define the DAG so it runs on a daily basis
+dag = DAG(dag_id="recommendations",
+          schedule_interval="0 0 * * *")
+
+# Make sure `etl()` is called in the operator. Pass the correct kwargs.
+task_recommendations = PythonOperator(
+    task_id="recommendations_task",
+    python_callable=etl,
+    op_kwargs={"db_engines": db_engines},
+)
+
+```
+
+### Query from the recommendations table (From Data Warehouse)
+
+```py
+def recommendations_for_user(user_id, threshold=4.5):
+    # Join with the courses table
+    query = """
+    SELECT title, rating FROM recommendations
+    INNER JOIN courses ON courses.course_id = recommendations.course_id
+    WHERE user_id=%(user_id)s AND rating>%(threshold)s
+    ORDER BY rating DESC
+    """
+    # Add the threshold parameter
+    predictions_df = pd.read_sql(query, db_engine, params = {"user_id": user_id, 
+                                                             "threshold": threshold})
+    return predictions_df.title.values
+
+# Try the function you created
+print(recommendations_for_user(12, 4.65))
+```
+---
