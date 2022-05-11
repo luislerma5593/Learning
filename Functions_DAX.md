@@ -106,7 +106,7 @@ ADDCOLUMNS(
 )		
 ```
 
-Fro Time intelligence. It shoul be used a table with all the dates available, not the Dates from the Fact table
+For Time intelligence. It should be used a table with all the dates available, not the Dates from the Fact table
 ```
 TOTALYTD(
 	SUM(ORDERS)
