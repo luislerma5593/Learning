@@ -123,7 +123,7 @@ First, HDFS is a distributed file system. It's similar to the file system you ha
  
 2. Databases (most common way, use raw text like json)
  a. Aplication Databases (OLTP - Online transaction processing, Transactions, inserts or changes, row-oriented)
- b. Analytical databases (OLAP - Online analytical processing, optimized for analysis or online analytical processing, column-oriented)
+ b. Analytical Databases (OLAP - Online analytical processing, optimized for analysis or online analytical processing, column-oriented)
 
 ```py
 # Function to extract table to a pandas DataFrame
