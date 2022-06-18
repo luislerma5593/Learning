@@ -39,11 +39,11 @@ df.drop_duplicates(	subset = column_list,
 					keep = 	'first', #Keep first duplicated
 							'last',	 #Keep last duplicated
 							False	 #Keep all duplicated
-					inplace = True)	#Drop duplicated rows directly inside DataFra,e without creating new object
+					inplace = True)	#Drop duplicated rows directly inside DataFrame without creating new object
 										
 #How to treat duplicate values?
 
-column_names = ['first_name', 'last_name', 'address'[
+column_names = ['first_name', 'last_name', 'address']
 summaries = {'height':'max', 'weight':'mean}
 height_weight = height_weight.groupby(by=column_names).agg(summaries).reset_index()
 ```
@@ -80,7 +80,11 @@ consistent_data = study_data[~inconsistent_rows] #ALT+126
 # VALUE CONSISTENCY
 df['col'].str.upper()
 df['col'].str.lower()
-df['col'].str.strip() #For spaces
+df['col'].str.split()
+df['col'].str.contains()
+df['col'].str.replace()
+df['col'].str.startswith()
+df['col'].str.strip() #To delete characters
 ```
 
 ### Data into categories
@@ -91,7 +95,7 @@ pd.qcut(df['col'], q=3, labels = names_list) #Divides automtically into the numb
 #cut
 ranges=[0,200000,500000,np.inf)
 names=[0-200K', '200K-500K', '500K+']]
-pd.cut(df['col'], bins=ranghes, labels=names)
+pd.cut(df['col'], bins=ranges, labels=names)
 ```
 
 ### Remapping categories
@@ -112,40 +116,81 @@ phones.loc[digits <10, 'number'] = np.nan
 ```
 
 ## Advanced Data Problems
-```py
 
+### Uniformity
+```py
+col2 = df['col1']
+colx = col2 * function
+df.loc['col1'] = colx
+
+pd.to_datetime(	df['col'],
+				infer_datetime_format = True	#Attempt to infer format of each date
+				errors = 'coerce') # Return NA for rows there conversion failed
+
+#Or it can be used
+col.dt.strftime('%d-%m-%Y') - For converting format, or can be used for Y,m or d extraction
 ```
 
+### Cross field validation
 ```py
+col = pd.to_datetime(col2)
+today = dt.date.today()
 
+age = today.year - col.dt.year
 ```
 
+### Completeness
 ```py
+import missingno as msno
 
+msno.matrix(airquality)
+plt.show()
+
+missing = df[col.isna()]
+complete = df[~col.isna()]
 ```
 
-```py
+## Record linkage
 
+### Comparing strings
+```py
+from fuzzywuzzy import fuzz
+
+fuzz.WRatio('Reeding', Reading') #Comparison score
+
+#Or can be done with mutiple strings
+string = a
+choices = [b,c,d]
+process.extract(string,choices, limit=df.shape[0])
 ```
 
+### Generating DataFrames
 ```py
+import recordlinkage
 
+indexer = recordlinkage.Index()
+indexer.block('state')
+pairs = indexer.index(df_a,df_b)
+
+compare_cl = recordlinkage.Compare()
+
+compare_cl.exact(´state´, 'state', label = 'state')
+compare_cl.string('surname', 'surname', threshold=0.85, label='surname')
+
+potential_matches = compare_cl.compute(pairs, df_a, df_b)
+
+potential_matches[potential_matches.sum(axis=1) => 2]
 ```
 
+### Linking DataFrames
 ```py
+duplicate_rows = matches.index.get_level_values(1)
+df_b_duplicates = df_b[df_b.index.isin(duplicate_rows)]
 
-```
+df_b_dup = df_b[df_b.index.isin(duplicate_rows)]
+df_b_new = df_b[~df_b.index.isin(duplicate_rows)]
 
-```py
-
-```
-
-```py
-
-```
-
-```py
-
+full_df = df_b.append(df_b_new)
 ```
 
 ## Examples 
@@ -241,6 +286,91 @@ assert airlines_survey['survey_response'].str.len().min() > 40
 
 # Print new survey_response column
 print(airlines_survey['survey_response'])
+---
+
+
+ADVANCED DATA PROBLEMS
+
+# Find values of acct_cur that are equal to 'euro'
+acct_eu = banking['acct_cur'] == 'euro'
+
+# Convert acct_amount where it is in euro to dollars
+banking.loc[acct_eu, 'acct_amount'] = banking.loc[acct_eu, 'acct_amount'] * 1.1
+
+# Unify acct_cur column by changing 'euro' values to 'dollar'
+banking.loc[acct_eu, 'acct_cur'] = 'dollar'
+
+# Assert that only dollar currency remains
+assert banking['acct_cur'].unique() == 'dollar'
+
+
+# Print the header of account_opend
+print(banking['account_opened'].head())
+
+# Convert account_opened to datetime
+banking['account_opened'] = pd.to_datetime(banking['account_opened'],
+                                           # Infer datetime format
+                                           infer_datetime_format = True,
+                                           # Return missing value for error
+                                           errors = 'coerce') 
+
+# Get year of account opened
+banking['acct_year'] = banking['account_opened'].dt.strftime('%Y')
+
+# Print acct_year
+print(banking['acct_year'])
+
+# Store fund columns to sum against
+fund_columns = ['fund_A', 'fund_B', 'fund_C', 'fund_D']
+
+# Find rows where fund_columns row sum == inv_amount
+inv_equ = banking[fund_columns].sum(axis=1) == banking['inv_amount']
+
+# Store consistent and inconsistent data
+consistent_inv = banking[inv_equ]
+inconsistent_inv = banking[~inv_equ]
+
+# Store consistent and inconsistent data
+print("Number of inconsistent investments: ", inconsistent_inv.shape[0])
+
+
+# Print number of missing values in banking
+print(banking.isna().sum())
+
+# Visualize missingness matrix
+msno.matrix(banking)
+plt.show()
+
+# Isolate missing and non missing values of inv_amount
+missing_investors = banking[banking['inv_amount'].isna()]
+investors = banking[~banking['inv_amount'].isna()]
+
+# Print number of missing values in banking
+print(banking.isna().sum())
+
+# Visualize missingness matrix
+msno.matrix(banking)
+plt.show()
+
+# Isolate missing and non missing values of inv_amount
+missing_investors = banking[banking['inv_amount'].isna()]
+investors = banking[~banking['inv_amount'].isna()]
+
+# Sort banking by age and visualize
+banking_sorted = banking.sort_values('age')
+msno.matrix(banking_sorted)
+plt.show()
+
+---
+
+# Import process from fuzzywuzzy
+from fuzzywuzzy import fuzz, process
+
+# Store the unique values of cuisine_type in unique_types
+unique_types = restaurants['cuisine_type'].unique()
+
+# Calculate similarity of 'asian' to all values of unique_types
+print(process.extract('asian', unique_types, limit = len(unique_types)))
 ```
 
 
