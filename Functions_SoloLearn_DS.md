@@ -1820,11 +1820,15 @@ KN Neighbors Classifier
 is_recession = ['r' if s=='recession' else 'g' for s in gdp_recession['econ_status']] - List with expressions
 ```
 
+---
 
+### Full Data Analyst Track in DataCamp
 
-
-
-
+1. Introduction to SQL
+2. Streamlined Data Ingestion with pandas
+3. Introduction to Relational Databases in SQL
+4. Joining Data in SQL
+5. Introduction to Databases in Python
 
 
 

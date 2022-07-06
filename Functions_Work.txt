@@ -1,0 +1,55 @@
+# Functions
+
+##General
+```py
+str((datetime.now()).strftime('%Y%m%d_%H%M%S%f')[:-4]) #Get specific time format with ms
+```
+
+## Conda
+```py
+conda env list
+conda activate <env>
+
+Pip install --numpy
+conda deactivate
+
+python -m pip install --upgrade pip    #Update pip
+pip install opencv-python 
+
+conda env export > GPU_AMI.yml    #Exportar en Users\anaconda3\
+conda env create -f GPU_AMI.yml    #Importar
+
+conda create --name GPU_AMI --file AMI_ENV.txt    #Create environment
+```
+
+## OS
+```py
+os.path.exists(path) # Verify if path exists
+os.listdir(path) #List items inside directory
+os.path.join(parent_dir, directory) #Appends directory at the end of parent
+os.mkdir(new_path)   #Create 1 dir
+os.makedirs(new_path) #Create nested dirs
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
