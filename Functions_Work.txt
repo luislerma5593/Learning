@@ -3,9 +3,11 @@
 ##General
 ```py
 str((datetime.now()).strftime('%Y%m%d_%H%M%S%f')[:-4]) #Get specific time format with ms
+tqdm - Show computation progress
 ```
 
 ## Conda
+* https://docs.conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf
 ```py
 conda env list
 conda activate <env>
@@ -29,11 +31,22 @@ os.listdir(path) #List items inside directory
 os.path.join(parent_dir, directory) #Appends directory at the end of parent
 os.mkdir(new_path)   #Create 1 dir
 os.makedirs(new_path) #Create nested dirs
+
 ```
 
+## Examples
+```py
+for index, filename in  enumerate(os.listdir('.')):
 
+```
 
-
+### Plot an image
+```py
+import matplotlib.image as mpimg
+img = mpimg.imread(control_image)
+imgplot = plt.imshow(img)
+plt.show()
+```
 
 
 
