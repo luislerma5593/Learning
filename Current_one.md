@@ -186,6 +186,7 @@ pred16 = results.predict(df)
 plt.plot(df['age'], pred16, label='Bachelor')
 
 ```
+![image](https://user-images.githubusercontent.com/78183885/188025469-ede726bc-d424-4b0e-a3d3-2afcee86c97c.png)
 
 ```py
 
