@@ -1921,7 +1921,7 @@ plt.xlabel('Age (years)')
 plt.ylabel('Income (1986 $)')
 plt.show()
 ```
-%%%%%%%%%%%%%%%%#$%#$%#$%#% Scatter between age/Income
+
 ### Multiple regression adding a quadratic term
 
 Because age has not a linear relationship with income, we can do the following, add age^2 to the regression:
