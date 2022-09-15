@@ -1,292 +1,184 @@
-# Exploratory Data Analysis
+# Sampling in Python
 
-1. Explore (shape, columns, head, tail)
-	* See frequencies with value_counts()
-	
-2. Clean and Validate (describe, info, compute if necessary)
-	* Compute if necessary
-	
-3. Filter and Visualize
-	* Histograms
-	* Filter and see statistics
+## Simple Sampling	
 
-## General
 ```py
-df.shape
-df.columns
-df.head()
-df.tail()
+series.sample(n)
 
+series.hist(bins=np.arange(59,93,2)
+
+np.random.seed() 
+series.sample(n=x, random_state=y) #Another way to set a seed
+
+np.random.(distribution).(parameters, size) - To generate pseudo-random numbers
+
+series.sample(frac=1) # Randomly samples the whole dataset (1 -> 100%)
+
+series[::interval] #Sampling by picking rows at regular intervals.
 ```
 
-### Clean and Validate
+## Systematic Sampling
 ```py
-df2=df.replace([a,b], np.NaN)
-df.replace([a,b], np.NaN, inplace = True)
-```
+# Shuffle the rows of attrition_pop
+attrition_shuffled = attrition_pop.sample(frac=1)
 
-### Filter and Visualize
-```py
-plt.hist(col.dropna(), bins = x, histtype='step') - Cannot work with nans
-plt.xlabel()
-plt.ylabel()
+# Reset the row indexes and create an index column
+attrition_shuffled = attrition_shuffled.reset_index(drop=True).reset_index()
+
+attrition_shuffled.reset_index()
+
+# Plot YearsAtCompany vs. index for attrition_shuffled
+attrition_shuffled.plot(x='index',y='YearsAtCompany', kind='scatter')
 plt.show()
 ```
 
-## Distributions
-
-### Probability Mass Function (PMF)
-To see a distribution, the best is to  use a PMF (Probability Mass Function). It shows unique values, so we can see exactly where the peaks are, compared to an histogram, that put values into bins.
-
-It is the probability that you get exactly x. PMF don't work well with a large amount of unique values
+## Stratified Sampling
 ```py
-pmf = Pmf(series, normalize = False) # Normalize converts to percentages form total
-pmf.bar(label=x)
-plt.show()
+series.sample(frac=0.1, random_state=2021) #Randomly samples the 10%)
+series.value_counts(normalize=True)
+
+df2 = df.groupby(col).sample(frac=0.1)
+df2.value_counts(normalize=True)
+
+df = df.groupby(col).sample(n=15)
+
+condition = series == 'x'
+df['weight'] = np.where(condition,1,2)
+df.sample(frac=0.1, weights='weight')
+
 ```
 
-### Cumulative Distribution Function
-
-Is the probability that you get value <= x, for a given value of x.
-
+### Equal proportion on every group
 ```py
-cdf_fun = Cdf(series) 
-cdf.plot()
-plt.show()
+# Proportion of employees by Education level
+education_counts_pop = attrition_pop['Education'].value_counts(normalize=True)
 
-probability = cdf_fun(value)
-value = cdf_fun.inverse(probability)
+# Print education_counts_pop
+print(education_counts_pop)
 
-# Select realinc
-income = gss['realinc']
+# Proportional stratified sampling for 40% of each Education group
+attrition_strat = attrition_pop.groupby('Education')\
+	.sample(frac=0.4, random_state=2022)
+
+# Calculate the Education level proportions from attrition_strat
+education_counts_strat = attrition_strat['Education'].value_counts(normalize=True)
+
+# Print education_counts_strat
+print(education_counts_strat)
 ```
 
+### Equal sampling on every group
 ```py
-norm.Pdf(series)
-sns.kdeplot(sample) - Get a PDF (Density) from a PMF (Mass)
+# Get 30 employees from each Education group
+attrition_eq = attrition_pop.groupby('Education')\
+	.sample(n=30, random_state=2022)      
+
+# Get the proportions from attrition_eq
+education_counts_eq = attrition_eq['Education'].value_counts(normalize=True)
+# Print the results
+print(education_counts_eq)
 ```
 
-## Relationships
+## Clusters
 
-### Exploring relationships
-
-When there are a lot of datapoints, we can use:
-
-- Transparency (alpha)
-- Marker smaller (markersize)
-- Jittering  
+1. Randomly sample subgroups 
+2. Randomly sample rows from those subgroups
 
 ```py
-x_jitter = x + np.random.normal(0,2, size=len(brfss))
-y_jitter = y + np.random.normal(0,2, size=len(brfss))
-plt.plot(x_jitter,y_jitter, 'o', markersize = 1, alpha = 0.2)
-plt.axis([x1,x2,y1,y2])
-plt.show()
+varieties = random.sample(series,k=n) # Get n random varieties
+
+variety_condition = series.isin(varieties)
+result = ratings[variety_condition]
+
+result['variety'].cat.remove_unused_categories() # To remove levels with zero rows
+
+result.groupby('variety').sample(n=5, random_state=x)
+
+---
+
+# Create a list of unique JobRole values
+job_roles_pop = list(attrition_pop['JobRole'].unique())
+
+# Randomly sample four JobRole values
+job_roles_samp = random.sample(job_roles_pop, k=4)
+
+# Filter for rows where JobRole is in job_roles_samp
+jobrole_condition = attrition_pop['JobRole'].isin(job_roles_samp)
+attrition_filtered = attrition_pop[jobrole_condition]
+
+# Remove categories with no rows
+attrition_filtered['JobRole'] = attrition_filtered['JobRole'].cat.remove_unused_categories()
+
+# Randomly sample 10 employees from each sampled job role
+attrition_clust = attrition_filtered.groupby('JobRole').sample(n=10, random_state=2022)
 ```
 
-### Violin plots and Box plots
+## Mean from data
 ```py
-data = df.dropna(subset = ['col1', 'col2'])
-sns.violinplot(x = 'col1', y = 'col2', data=data, inner=None)
-plt.show()
+# Calculate the same thing for the cluster sample 
+mean_attrition_clust = attrition_clust.groupby('RelationshipSatisfaction')['Attrition'].mean()
 
-sns.boxplot(x='col1', y= 'col2', data=data, whis=10)
-plt.show()
 
-#Can add
-plt.yscale('log')
+# Print the result
+print(mean_attrition_clust)
 ```
-
-### Coefficient of corrlation
-
-This coefficient, only works for linear relationships. 
-
-```py
-df.corr() #Correlation matrix
-```
-
-### Simple linear regression
-
-It's important to take a look at the slope of the linear regression, because the coefficient, doesn't give us this information.
-
-```py
-form scipy.stats import linregress
-
-res = linregress(xs,ys) # Returns, slope, intercept, rvalue, pvalue, std
-
-fx = np.array([xs.min(), xs.max()])
-fy = res.intercept + res.slope*fx
-plt.plot(fx, fy, '-')
-```
-
-## Multivariate relationships
-
-- Regression is not simetric, so the regression of A onto B, is not the same that the regression on B onto A. 
-
-- Regression alone cannot tell if A might cause B or if B might cause A.
-
-```py
-import statsmodels.fomrula.api as smf
-
-# ols stands for "ordinary least squares"
-results = smf.ols( 'A ~ B', data = df).fit() # Regress A as a function of B (y ~ x)
- 
-results.params # We get slope and intercept
-```
-
-### Multiple regression
-```py
-smf.ols('income ~ education + age', data=df).fit()
-
-grouped = df.groupby('age')
-mean_income_by_age = grouped['income'].mean()
-
-plt.plot(mean_income_by_age, 'o', alpha = 0.5)
-plt.xlabel('Age (years)')
-plt.ylabel('Income (1986 $)')
-plt.show()
-```
-%%%%%%%%%%%%%%%%#$%#$%#$%#% Scatter between age/Income
-### Multiple regression adding a quadratic term
-
-Because age has not a linear relationship with income, we can do the following, add age^2 to the regression:
-```py
-df['age2'] = gss['age']**2
-
-model = smf.ols('income ~ educ + age + age2, data = df)
-results = model.fit()
-results.params
-```
-
-### Visualizing regression results
-
-Sometimes the best way to understand a model is by looking at its predictions rather tan its parameters.     
-```py
-
-grouped = df.groupby('age')
-mean_income_by_age = grouped['income'].mean()
-plt.plot(mean_income_by_age, 'o', alpha = 0.5)
-
-df['age'] = np.linspace(18,85)
-df['age2'] =  df['age']**2
-
-df['educ'] = 12
-df['educ2'] = df['educ']**2
-pred12 = results.predict(df)
-plt.plot(df['age'], pred12, label='High School')
-
-df['educ'] = 14
-df['educ2'] = df['educ']**2
-pred14 = results.predict(df)
-plt.plot(df['age'], pred14, label='Associate')
-
-df['educ'] = 16
-df['educ2'] = df['educ']**2
-pred16 = results.predict(df)
-plt.plot(df['age'], pred16, label='Bachelor')
-
-```
-![image](https://user-images.githubusercontent.com/78183885/188025469-ede726bc-d424-4b0e-a3d3-2afcee86c97c.png)
 
 ```py
 
 ```
-### Examples
+
 ```py
-#CDF
-income = gss['realinc']
 
-# Plot the CDFs
-Cdf(income[high]).plot(label='High school')
-Cdf(income[assc]).plot(label='Associate')
-Cdf(income[bach]).plot(label='Bachelor')
+```
 
-# Label the axes
-plt.xlabel('Income (1986 USD)')
-plt.ylabel('CDF')
-plt.legend()
+## Examples
+
+```py
+# Systematic Sampling
+
+# Shuffle the rows of attrition_pop
+attrition_shuffled = attrition_pop.sample(frac=1)
+
+# Reset the row indexes and create an index column
+attrition_shuffled = attrition_shuffled.reset_index(drop=True).reset_index()
+
+attrition_shuffled.reset_index()
+
+# Plot YearsAtCompany vs. index for attrition_shuffled
+attrition_shuffled.plot(x='index',y='YearsAtCompany', kind='scatter')
 plt.show()
 
 ---
 
-# Evaluate the normal PDF
-xs = np.linspace(2, 5.5)
-ys = dist.pdf(xs)
+# Simple Sampling
 
-# Plot the model PDF
-plt.clf()
-plt.plot(xs, ys, color='gray')
-
-# Plot the data KDE
-sns.kdeplot(log_income)
-
-# Label the axes
-plt.xlabel('log10 of realinc')
-plt.ylabel('PDF')
-plt.show()
+# Perform simple random sampling to get 0.25 of the population
+attrition_srs = attrition_pop.sample(frac=0.25, random_state=2022)
 
 ---
 
-# Drop rows with missing data
-data = brfss.dropna(subset=['_HTMG10', 'WTKG3'])
+# Stratified
 
-# Make a box plot
-sns.boxplot(x='WTKG3', y='_HTMG10', data=data, whis=10)
-
-# Plot the y-axis on a log scale
-plt.yscale('log')
-
-# Remove unneeded lines and label axes
-sns.despine(left=True, bottom=True)
-plt.xlabel('Height in cm')
-plt.ylabel('Weight in kg')
-plt.show()
+# Perform stratified sampling to get 0.25 of each relationship group
+attrition_strat = attrition_pop.groupby('RelationshipSatisfaction').sample(frac=0.25, random_state=2022)
 
 ---
 
-# Plot the scatter plot
-plt.clf()
-x_jitter = xs + np.random.normal(0, 0.15, len(xs))
-plt.plot(x_jitter, ys, 'o', alpha=0.2)
+#Cluster
 
-# Plot the line of best fit
-fx = np.array([xs.min(), xs.max()])
-fy = res.slope * fx + res.intercept
-plt.plot(fx, fy, '-', alpha=0.7)
+# Create a list of unique RelationshipSatisfaction values
+satisfaction_unique = list(attrition_pop['RelationshipSatisfaction'].unique())
 
-plt.xlabel('Income code')
-plt.ylabel('Vegetable servings per day')
-plt.ylim([0, 6])
-plt.show()
+# Randomly sample 2 unique satisfaction values
+satisfaction_samp = random.sample(satisfaction_unique, k=2)
 
----
+# Filter for satisfaction_samp and clear unused categories from RelationshipSatisfaction
+satis_condition = attrition_pop['RelationshipSatisfaction'].isin(satisfaction_samp)
+attrition_clust_prep = attrition_pop[satis_condition]
+attrition_clust_prep['RelationshipSatisfaction'] = attrition_clust_prep['RelationshipSatisfaction'].cat.remove_unused_categories()
 
-from scipy.stats import linregress
-import statsmodels.formula.api as smf
-
-# Run regression with linregress
-subset = brfss.dropna(subset=['INCOME2', '_VEGESU1'])
-xs = subset['INCOME2']
-ys = subset['_VEGESU1']
-res = linregress(xs, ys)
-print(res)
-
-# Run regression with StatsModels
-results = smf.ols('INCOME2 ~ _VEGESU1', data = subset).fit()
-print(results.params)
-
----
-
-import statsmodels.formula.api as smf
-
-# Add a new column with educ squared
-gss['educ2'] = gss['educ']**2
-
-# Run a regression model with educ, educ2, age, and age2
-results = smf.ols('realinc ~ educ + educ2 + age + age2', data=gss).fit()
-
-# Print the estimated parameters
-print(results.params)
+# Perform cluster sampling on the selected group, getting 0.25 of attrition_pop
+attrition_clust = attrition_clust_prep.groupby('RelationshipSatisfaction').sample(n=len(attrition_pop) // 4, random_state=2022)
 
 ```
 

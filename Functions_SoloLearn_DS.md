@@ -2175,6 +2175,260 @@ plt.show()
 
 ---
 
+# Statistics in Python
+
+## Summary Statistics
+
+When the distribution is simetrical, it can be used the mean. But when the distribution is skewed, it's probably better to use the median.
+
+```py
+# Import numpy as np
+import numpy as np
+
+# Subset for Belgium and USA only
+be_and_usa = food_consumption[(food_consumption['country'] == 'USA') | (food_consumption['country'] == 'Belgium')]
+
+# Group by country, select consumption column, and compute mean and median
+print(be_and_usa.groupby('country')['consumption'].agg(['mean', 'median']))
+
+---
+
+# Subset for food_category equals rice
+rice_consumption = food_consumption[food_consumption['food_category'] == 'rice']
+
+# Calculate mean and median of co2_emission with .agg()
+print(rice_consumption['co2_emission'].agg(['mean', 'median']))
+```
+
+```py
+print(np.quantile(food_consumption['co2_emission'], [0.25, 0.5, 0.75])) - Quantiles
+```
+
+## Random Numbers and Probability
+
+```py
+np.random.seed(x)
+list.sample(n, replace = True/False)
+```
+
+### Discrete distributions
+
+It´s used for discrete or countable variables. 
+
+- You can find the probability that X is exactly the same as a given value.
+
+```py
+ # Create probability distribution
+size_dist = restaurant_groups['group_size'].value_counts() / restaurant_groups.shape[0]
+
+# Reset index and rename columns
+size_dist = size_dist.reset_index()
+size_dist.columns = ['group_size', 'prob']
+
+# Calculate expected value
+expected_value = (size_dist.group_size * size_dist.prob).sum()
+```
+
+### Continuous distributions
+
+- You can find the probability that X is within a range.
+
+#### Uniform Distribution
+```py
+from scipy.stats import uniform
+uniform.cdf(7,0,12) - Prob to wait less or equal than 7 minutes, from 0 to 12
+
+uniform.rvs(0,5,10) -  Generating values with uniform distribution (min, max, size)
+```
+
+#### Binomial Distribution
+
+Outcome with two possible values with independent trials
+
+- Discrete distribution
+
+- Expected value: n * p
+ 
+```py
+from scipy.stats import binom
+binom.rvs(a,p, size = n) - Number, Prob of succes, Size
+
+binom.pmf(num,size,p) - Get probability of getting exactly a given value
+binom.cdf(num,size,p) - Get probability of getting x successes less than a given value
+```
+
+## More distributions and Central Limit Theorem
+
+### Normal distribution
+
+Standard normal distribution:
+
+- Mean = 0
+- Std = 1
+
+1 std - 68%
+2 std - 95%
+3 std - 99.7%
+
+```py
+from scipy.stats import norm
+
+norm.cdf(value, mean, std) - To get the probability to get less than 'value'
+
+norm.ppf(probability, mean, std) - To get percentiles
+
+norm.rvs(mean, std, size) - To generate values from a normal distribution
+```
+#### Central limit theorem (CLT)
+
+The sampling distribution of a statistic becomes closer to the normal distribution as the number of trials increases. This apply with mean, std, proportions.
+
+* This applies only when samples are taken randomly and are independent
+
+### Poisson distribution
+
+Probability of dome # of events ocurring over a fixed period of time. It's a discrete distribution, because it counts events.
+
+It's used when an event appears to happen at a certain rate, but completely random; like:
+
+- Animals adopted by a shelter
+- Number of people arriving at a restaurant
+
+The expected value is the average number of the event.
+
+```py
+from scipy.stats import poisson
+
+poisson.pmf(number, lamba) - To get probability of an exact value
+poisson.cdf(number, lambda) - Probability for less than a value
+
+poisson.rsv(lambda, size) - Get samples
+```
+
+### Exponential distribution
+
+Represents probability of a certain time passing between Poisson events, it also uses lambda.
+
+- Continuous, because represent time.
+
+- Expected value: 1 / lambda
+
+* Probability of more than 1 day between adoption
+* Probability of fewer than 10 minutes between customers in the restaurant
+
+```py
+from scipy.stats import expon
+expon.cdf(val,scale) 
+```
+
+### (Student) t - distribution
+
+Similar to the normal, but observations are more likely to fall further from the mean.
+
+* Parameter: degrees of freedom. Lower DOF results in higher std
+
+### Log-normal distribution
+
+Like length of chess games, adult blood pressure.
+
+
+## Correlation and experimental design
+
+Correlation doens´t mean that x causes y.
+
+For exmaple
+
+Smoking causes Lung Cancer
+Coffee is associated with smoking
+So, Coffee is associated with Lung cance,r but doens't causes it. Or 
+
+Coffee <> Smoking <> Lung Cancer
+Holidays <> Special deals <> Retail Sales
+
+```py
+sns.scatterplot(x,y, data = df)
+sns.lmplot(x,y,data, ci=None)
+
+Series1.corr(Series2) - To get the correlation coefficient
+```
+When the the distribution ir skewed, it can be used a Log transformation
+
+```py
+log_n = np.log(n)
+sns.lmplot(log_n,y,data, ci)
+```
+
+### Design of experiments
+
+Experiment aims to answer: What is the effect of the treatment on the response?
+
+Treatment: independent variable (advertisement)
+Response: dependent variable (# of products purchased)
+
+#### A/B Test
+
+* Groups should be comparable
+
+Tratment group: Will receive adds
+Control group: Won't receive adds
+
+To avoid bias:
+
+- Randomized controlled trial
+- Placebo (Participants won't know the group they belong to)
+
+While controlled experiments are ideal, many situations and research questions are not conducive to a controlled experiment. In a controlled experiment, causation can likely be inferred if the control and test groups have similar characteristics and don't have any systematic difference between them. On the other hand, causation cannot usually be inferred from observational studies, whose results are often misinterpreted as a result.
+
+
+## Examples
+```py
+
+# Outliers
+# Calculate total co2_emission per country: emissions_by_country
+emissions_by_country = food_consumption.groupby('country')['co2_emission'].sum()
+
+# Compute the first and third quantiles and IQR of emissions_by_country
+q1 = np.quantile(emissions_by_country, 0.25)
+q3 = np.quantile(emissions_by_country, 0.75)
+iqr = q3 - q1
+
+# Calculate the lower and upper cutoffs for outliers
+lower = q1 - 1.5 * iqr
+upper = q3 + 1.5 * iqr
+
+# Subset emissions_by_country to find outliers
+outliers = emissions_by_country[(emissions_by_country < lower)|(emissions_by_country > upper)]
+print(outliers)
+```
+
+Mean of means, example:
+
+The mean of means
+You want to know what the average number of users (num_users) is per deal, but you want to know this number for the entire company so that you can see if Amir's deals have more or fewer users than the company's average deal. The problem is that over the past year, the company has worked on more than ten thousand deals, so it's not realistic to compile all the data. Instead, you'll estimate the mean by taking several random samples of deals, since this is much easier than collecting data from everyone in the company.
+
+```py
+# Set seed to 321
+np.random.seed(321)
+
+sample_means = []
+# Loop 30 times to take 30 means
+for i in range(30):
+  # Take sample of size 20 from num_users col of all_deals with replacement
+  cur_sample = all_deals['num_users'].sample(20, replace = True)
+  # Take mean of cur_sample
+  cur_mean = cur_sample.mean()
+  # Append cur_mean to sample_means
+  sample_means.append(cur_mean)
+
+# Print mean of sample_means
+print(np.mean(sample_means))
+
+# Print mean of num_users in amir_deals
+print(np.mean(amir_deals['num_users']))
+```
+
+---
+
 # Machine Learning
 ```py
 df.corr().round(x) - Creates a correlation matrix
