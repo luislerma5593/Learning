@@ -14,25 +14,35 @@ np.random.(distribution).(parameters, size) - To generate pseudo-random numbers
 
 series.sample(frac=1) # Randomly samples the whole dataset (1 -> 100%)
 
-series[::interval] #Sampling by picking rows at regular intervals.
 ```
 
 ### Systematic Sampling
+
+One sampling method that avoids randomness is called systematic sampling. Here, you pick rows from the population at regular intervals.
+
 ```py
-# Shuffle the rows of attrition_pop
-attrition_shuffled = attrition_pop.sample(frac=1)
+# Set the sample size to 70
+sample_size = 70
 
-# Reset the row indexes and create an index column
-attrition_shuffled = attrition_shuffled.reset_index(drop=True).reset_index()
+# Calculate the population size from attrition_pop
+pop_size = len(attrition_pop)
 
-attrition_shuffled.reset_index()
+# Calculate the interval
+interval = pop_size // sample_size
 
-# Plot YearsAtCompany vs. index for attrition_shuffled
-attrition_shuffled.plot(x='index',y='YearsAtCompany', kind='scatter')
-plt.show()
+# Systematically sample 70 rows
+attrition_sys_samp = attrition_pop[::interval]
+
+# Print the sample
+print(attrition_sys_samp)
 ```
 
 ### Stratified Sampling
+
+If you are interested in subgroups within the population, then you may need to carefully control the counts of each subgroup within the population. 
+Proportional stratified sampling results in subgroup sizes within the sample that are representative of the subgroup sizes within the population. 
+It is equivalent to performing a simple random sample on each subgroup.
+
 ```py
 series.sample(frac=0.1, random_state=2021) #Randomly samples the 10%)
 series.value_counts(normalize=True)
@@ -200,19 +210,109 @@ series.std(ddof=x) - 0 for Populations / 1 for Samples or Distributions
 
 ## Bootstrap
 
+With bootstraping, we treat the dataset as a sammple and use it to build up a theoretical population.
+
+There are three steps:
+
+1. Make a resample of the dame size as the original sample (replacing)
+2. Calculate the statistic of interest for this bootstrap sample
+3. Repet steps 1 and 2 many times
+
+The key to deciding whether to sample without or with replacement is whether or not your dataset is best thought of as being the whole population or not.
+
+In the folowing excercise, the mean from "mean_danceability_1000", is the estimated population mean:
+
+```py
+# Replicate this 1000 times
+mean_danceability_1000 = []
+for i in range(1000):
+	mean_danceability_1000.append(
+        np.mean(spotify_sample.sample(frac=1, replace=True)['danceability'])
+	)
+
+# Draw a histogram of the resample means
+plt.hist(mean_danceability_1000)
+plt.show()
+```
+If the original sample wasn't colsely representative of the population, then the boostrap distribution won't be a good estimate. Bootstraping is good to estimate the population std.
+
+population_std = std_error * sqrt(n) - Where 'n' is sample size
+
+The standard error is the standard deviation of the statistic of interest.
+
+The std of a boostrap is a good approximation of the standard error.
+
+#### Sampling distribution vs bootstrap distribution
+
+The sampling distribution mean is the best estimate of the true population mean; the bootstrap distribution mean is closest to the original sample mean.
+
+The calculation from the bootstrap distribution is the best estimate of the population standard deviation.
+
+So, boostraping is not too good for estimating mean, but is great for estimating std
+
 ```py
 
+###### Sampling
+mean_popularity_2000_samp = []
+
+# Generate a sampling distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_samp.append(
+    	# Sample 500 rows and calculate the mean popularity 
+    	np.mean(spotify_population.sample(n=500, replace=False)['popularity'])
+    )
+
+# Print the sampling distribution results
+print(mean_popularity_2000_samp)
+
+
+###### Boostrap
+mean_popularity_2000_boot = []
+
+# Generate a bootstrap distribution of 2000 replicates
+for i in range(2000):
+    mean_popularity_2000_boot.append(
+    	# Resample 500 rows and calculate the mean popularity     
+    	np.mean(spotify_sample.sample(n=500, replace=True)['popularity'])
+    )
+
+# Print the bootstrap distribution results
+print(mean_popularity_2000_boot)
 ```
 
-```py
+The calculation from the bootstrap distribution is the best estimate of the population standard deviation.
 
+```py
+# Calculate the population std dev popularity
+pop_sd = spotify_population['popularity'].std(ddof=0)
+
+# Calculate the original sample std dev popularity
+samp_sd = spotify_sample['popularity'].std()
+
+# Calculate the sampling dist'n estimate of std dev popularity
+samp_distn_sd = np.std(sampling_distribution, ddof=1) * np.sqrt(5000)
+
+# Calculate the bootstrap dist'n estimate of std dev popularity
+boot_distn_sd = np.std(bootstrap_distribution, ddof=1) * np.sqrt(5000)
 ```
+ 
+### Confidence Intervals
 
 ```py
+# Quantile Method
 
-```
+np.quantile(series, 0.025)
+np.quantile(series, 0.975)
 
-```py
+# Std error method (Assuming the distribution is normal)
+
+norm.ppf(quantile, loc=o, scale=1) - To get the inverted CDF (Flip 'x' and 'y' axis)
+
+point_estimate = np.mean(x)
+std_error = np.std(x, ddof=1)
+
+lower = norm.ppf(0.025, loc=point_estimate, scale= std_error)
+upper = norm.ppf(0.975, loc=point_estimate, scale=std_error)
 
 ```
 
@@ -228,17 +328,20 @@ series.std(ddof=x) - 0 for Populations / 1 for Samples or Distributions
 ```py
 # Systematic Sampling
 
-# Shuffle the rows of attrition_pop
-attrition_shuffled = attrition_pop.sample(frac=1)
+# Set the sample size to 70
+sample_size = 70
 
-# Reset the row indexes and create an index column
-attrition_shuffled = attrition_shuffled.reset_index(drop=True).reset_index()
+# Calculate the population size from attrition_pop
+pop_size = len(attrition_pop)
 
-attrition_shuffled.reset_index()
+# Calculate the interval
+interval = pop_size // sample_size
 
-# Plot YearsAtCompany vs. index for attrition_shuffled
-attrition_shuffled.plot(x='index',y='YearsAtCompany', kind='scatter')
-plt.show()
+# Systematically sample 70 rows
+attrition_sys_samp = attrition_pop[::interval]
+
+# Print the sample
+print(attrition_sys_samp)
 
 ---
 
