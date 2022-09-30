@@ -2672,7 +2672,7 @@ population_std = std_error * sqrt(n) - Where 'n' is sample size
 
 The standard error is the standard deviation of the statistic of interest.
 
-The std of a boostrap is a good approximation of the standard error.
+The std of a bootstrap is a good approximation of the standard error.
 
 #### Sampling distribution vs bootstrap distribution
 
@@ -2727,6 +2727,10 @@ samp_distn_sd = np.std(sampling_distribution, ddof=1) * np.sqrt(5000)
 # Calculate the bootstrap dist'n estimate of std dev popularity
 boot_distn_sd = np.std(bootstrap_distribution, ddof=1) * np.sqrt(5000)
 ```
+ 
+ np.std(bootstrap_distribution, ddof=1), is the standard error. So boot_distn_sd would be the estimate of the population std
+ 
+boot_distn_sd = std_error x sqrt(n)  is similar to pop_sd
  
 ### Confidence Intervals
 
@@ -2801,6 +2805,12 @@ attrition_clust_prep['RelationshipSatisfaction'] = attrition_clust_prep['Relatio
 attrition_clust = attrition_clust_prep.groupby('RelationshipSatisfaction').sample(n=len(attrition_pop) // 4, random_state=2022)
 
 ```
+---
+
+# Hypothesis testing
+
+
+
 
 ---
 
