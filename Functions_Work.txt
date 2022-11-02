@@ -10,6 +10,10 @@ tqdm - Show computation progress
 * https://docs.conda.io/projects/conda/en/latest/_downloads/843d9e0198f2a193a3484886fa28163c/conda-cheatsheet.pdf
 ```py
 conda env list
+
+conda create -n name
+conda install python=3.9.13
+
 conda activate <env>
 
 Pip install --numpy
@@ -17,6 +21,8 @@ conda deactivate
 
 python -m pip install --upgrade pip    #Update pip
 pip install opencv-python 
+
+conda create --offline --name GPU_AMI #Create environment
 
 conda env export > GPU_AMI.yml    #Exportar en Users\anaconda3\
 conda env create -f GPU_AMI.yml    #Importar

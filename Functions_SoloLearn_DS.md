@@ -80,6 +80,7 @@ df.groupby("col")["col2"].agg([min, max])
 # Same
 df.groupby(col1)[col2]
 df.pivot_table(values=col2, index=col1, aggfunc = x) - Can add columns = y, fill_value = 0, margins = True (totals)
+df.pivot(columns, values) - Doesn't aggregate
 
 # Categorical
 df["col"].value_counts() - Count ocurrencies (Can use sort, normalize)
