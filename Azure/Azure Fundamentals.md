@@ -26,8 +26,8 @@ Infrastructure as a service (IaaS), platform as a service (PaaS), and software a
 - High availability (SLA: Service Level Agreement)
 	- Not 100% because it needs time to backup, maintenance, etc.
 	- In azure from 99% to 99.9% depending on the service
-
 - Scalability: Increase or decrease and pay what you use
+
 	- Horizontal: De/Increasing number of resources (Virtual Machines)
 	- Vertical: De/Increasing capabilities of resources (CPU or RAM)
 	
@@ -55,7 +55,61 @@ Infrastructure as a service (IaaS), platform as a service (PaaS), and software a
 
 ## Architecture and services
 
+### Services
+- Azure Web Apps
+- Azure functions (No coding)
+- Azure Container Instances
+- Relational DB
+
+### Accounts 
+
+Azure Account -> Subscriptions > Resource Group > Resources
+
+* Resources can just be in one resource group
+
+#### Sandbox
+Many of the Learn exercises use a technology called the sandbox, which creates a temporary subscription that's added to your Azure account. This temporary subscription allows you to create Azure resources during a Learn module. Learn automatically cleans up the temporary resources for you after you've completed the module.
+
+- Get-date
+- az intercative
+- az version
+- az upgrade
+- exit
+
+### Azure physical infrastructure
+
+Availability zones are physically separate datacenters within an Azure region.
+
+Region pairs: Most Azure regions are paired with another region within the same geography (such as US, Europe, or Asia) at least 300 miles away. 
+
+* What Azure feature replicates resources across regions that are at least 300 miles away from each other?
+ANSWER: Region pairs
+
+### Azure management infrastructure
+
+Management Groups > Suscriptions > Resource Group > Resource
+
+
+### Computer services and networking services
+
+1. Virtual Machines: Virtual machine scale sets let you create and manage a group of identical, load-balanced VMs.
+2. Azure Virtual Desktop: Is a desktop and application virtualization service that runs on the cloud.
+3. Containers: Are a virtualization environment, and can contain multiple apps each one with it´s OS (There are PaaS)
+	* Virtual machines virtualize hardware (Includes the OS that include the app)
+	* Containers virtualize the OS (Includes the app with the necessary OS)
+	* VM for Complete control, Containers for portability and performance
+
+
+##### Containers example
+
+Containers are often used to create solutions by using a microservice architecture. This architecture is where you break solutions into smaller, independent pieces. For example, you might split a website into a container hosting your front end, another hosting your back end, and a third for storage. This split allows you to separate portions of your app into logical sections that can be maintained, scaled, or updated independently.
+
+Imagine your website back-end has reached capacity but the front end and storage aren't being stressed. With containers, you could scale the back end separately to improve performance. If something necessitated such a change, you could also choose to change the storage service or modify the front end without impacting any of the other components.
 
 --- 
 
 ## Management and governance
+
+
+
+
