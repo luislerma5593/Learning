@@ -95,10 +95,19 @@ Management Groups > Suscriptions > Resource Group > Resource
 1. Virtual Machines: Virtual machine scale sets let you create and manage a group of identical, load-balanced VMs.
 2. Azure Virtual Desktop: Is a desktop and application virtualization service that runs on the cloud.
 3. Containers: Are a virtualization environment, and can contain multiple apps each one with it´s OS (There are PaaS)
-	* Virtual machines virtualize hardware (Includes the OS that include the app)
 	* Containers virtualize the OS (Includes the app with the necessary OS)
+	* Virtual machines virtualize hardware (Includes the OS that include the app)
 	* VM for Complete control, Containers for portability and performance
+4. Azure Functions: Commonly used when you need to perform work in response to an event (often via a REST request), timer, or message from another Azure service
+5. Azure App Service: Is a robust hosting option that you can use to host your apps in Azure (Web apps, API apps, WebJobs, Mobile apps)
+6. Azure Virtual Networking: Enable Azure resources, such as VMs, web apps, and databases, to communicate with each other.
 
+
+#### Serverless computing
+
+1. No infrastructure management
+2. Pay what you use
+3. Scalability
 
 ##### Containers example
 
@@ -106,6 +115,7 @@ Containers are often used to create solutions by using a microservice architectu
 
 Imagine your website back-end has reached capacity but the front end and storage aren't being stressed. With containers, you could scale the back end separately to improve performance. If something necessitated such a change, you could also choose to change the storage service or modify the front end without impacting any of the other components.
 
+####
 --- 
 
 ## Management and governance
