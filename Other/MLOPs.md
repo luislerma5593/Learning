@@ -16,7 +16,7 @@ Design > Development > Deployment
 * It's common to go back and forth
 * Evaluate each phase with stakeholders
 
-1 Design
+1. Design
 	* Added value
 	* Business requirements
 	* Key metrics
