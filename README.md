@@ -1,4 +1,3 @@
 # Learning
 
-* Containers
-https://www.youtube.com/watch?v=gjRoNFopFig
+* Containers - https://www.youtube.com/watch?v=gjRoNFopFig
