@@ -73,6 +73,8 @@ Se debe crear un ambiente en ANACONDA NAVIGATOR
 
 https://interactivechaos.com/es/manual/tutorial-de-pandas/dataframes-metodos-de-agregacion-y-estadistica
 
+pd.options.display.float_format = '${:,.2f}'.format - To change the format from tables
+
 serie_1 = pd.Series([3, 7, 9, 8]) - Crear una serie
 serie_1.loc[0) - Es para acceder a un valor de una serie
 
