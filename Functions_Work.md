@@ -1,6 +1,6 @@
 # Functions
 
-##General
+## General
 ```py
 str((datetime.now()).strftime('%Y%m%d_%H%M%S%f')[:-4]) #Get specific time format with ms
 tqdm - Show computation progress
