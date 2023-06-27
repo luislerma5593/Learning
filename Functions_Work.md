@@ -54,6 +54,41 @@ imgplot = plt.imshow(img)
 plt.show()
 ```
 
+### Plotting a df with subplots
+```py
+import matplotlib.pyplot as plt
+
+plt.style.use('seaborn-white')
+
+fig = plt.figure(figsize=(50*1.2,30*1.2))
+axes = fig.subplots(3, 3, sharex=True, sharey=False)
+index=0
+max_index = len(my_df.columns)
+
+
+palette = ["#223127", "#66071E", "#932D48", "#2281A7", "#F9A03F", "#508991", "#B53737"]
+
+for i in range(3):
+    for j in range(3):
+        
+        if index == max_index:
+            continue
+        
+        my_df.iloc[:,index].plot(ax=axes[i,j], color = palette[index], label = my_df.columns[index])
+        axes[i,j].axhline(y=0, linestyle='--', color='k', linewidth=2)
+        axes[i,j].legend(fontsize=40)
+        
+        axes[i, j].tick_params(axis='both', labelsize=40, labelbottom=True)
+        axes[i, j].set_xticks(my_df.index)
+        
+        index += 1
+
+# Delete the last two subplots
+axes[-1, -1].remove()
+axes[-1, -2].remove()
+        
+plt.show()
+```
 
 
 
