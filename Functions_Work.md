@@ -54,6 +54,12 @@ imgplot = plt.imshow(img)
 plt.show()
 ```
 
+### Concatenating columns
+
+```py
+pd.concat([col1, col2, col3], axis=1)
+```
+
 ### Plotting a df with subplots
 ```py
 import matplotlib.pyplot as plt
