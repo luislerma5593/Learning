@@ -105,7 +105,9 @@ for q in user_msgs:
 
 ---
 
-### Text and capabilities
+### Beyond text completion
+
+#### Text and capabilities
 
 * Zero-shot prompting
 
@@ -113,9 +115,7 @@ In-context learning:
 * One-shot prompting
 * Few-shots prompting
 
-### Beyond text completion
-
-### Text moderation
+#### Text moderation
 
 * Identifying inapportiate content
 
@@ -135,7 +135,7 @@ response = client.moderations.create(
 print(response.results[0].category_scores)
 ```
 
-### Speech-to-Text
+#### Speech-to-Text
 
 * client.audio.transcriptions.create(model='whisper-1', file=audio_file)
 
@@ -153,7 +153,7 @@ response = client.audio.transcriptions.create(model="whisper-1", file = audio_fi
 print(response.text)
 ```
 
-### Speech translation with Whisper
+#### Speech translation with Whisper
 
 * Just changing the method transcription > translation
 * Can use prompt parameter to provide context
@@ -174,7 +174,7 @@ response = client.audio.translations.create(model='whisper-1', file=audio_file, 
 print(response.text)
 ```
 
-### Combining models
+#### Combining models
 
 * First speech-to-text and the output, is the input for the chat endpoint
 
